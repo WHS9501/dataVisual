@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <link
+      href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+      rel="stylesheet"
+    />
+
+    <title>차량 데이터 시각화</title>
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .chart-container {
+        height: 50vh;
+      }
+
+      .flex-container {
+        justify-content: flex-start;
+        display: flex;
+      }
+
+      .flex-align-center {
+        align-items: center;
+      }
+      .graph-top {
+        display: flex;
+        align-items: center;
+      }
+      .graph-top h2 {
+        margin-right: 20px;
+      }
+      #searchForm {
+        width: 800px;
+        border: skyblue 10px solid;
+      }
+
+      .my_btn {
+
+        background-color: skyblue;
+
+        color: black;
+
+        padding: 10px 30px;
+
+      }
+    </style>
+  </head>
+  <body>
+    <h2>공통 조건 입력(Collection: aggbattdata1ms)</h2>
+    <p style="color: crimson;"><strong>(오른쪽 검색 기록표 누르면 이전 조건 적용가능)</strong></p>
+    <div class="flex-container">
+      <form id="searchForm">
+        <label for="serialNumber"><strong>Serial Number:</strong></label>
+        <input
+          type="text"
+          id="serialNumber"
+          name="serialNumber"
+          placeholder="차량 시리얼 넘버"
+        />
+        <br />
+        <hr>
+
+        <label for="startDate"><strong>Start Date:</strong></label>
+        <input type="datetime-local" id="startDate" name="startDate" />
+        <br />
+        <hr>
+
+        <label for="endDate"><strong>End Date:</strong></label>
+        <input type="datetime-local" id="endDate" name="endDate" />
+        <br />
+        <hr>
+        <label for="state"><strong>State:</strong></label>
+        <select id="state" name="state">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+        <br />
+        <hr>
+
+        <label for="limit"><strong>Limit:</strong></label>
+        <input
+          type="number"
+          id="limit"
+          name="limit"
+          min="1"
+          step="1"
+          placeholder="필수입력X"
+        />
+        <br />
+        <hr>
+        <button onclick="deleteSearchHistory()" class='my_btn'>검색기록 삭제</button>
+      </form>
+
+      <div id="wrapper"></div>
+    </div>
+
+    <div class="container">
+      <div class="chart-container">
+        <section class="graph-top">
+          <h2>Chart 1</h2>
+          <label for="category">Category:</label>
+          <select id="Chart1_category" name="Chart1_category">
+            <option value="speed">Speed</option>
+            <option value="rpm">RPM</option>
+            <option value="state">State</option>
+            <option value="displaysoc">Display SOC</option>
+            <option value="bmssoc">BMS SOC</option>
+            <option value="range">Range</option>
+            <option value="trip">Trip</option>
+            <option value="lat">Latitude</option>
+            <option value="lng">Longitude</option>
+            <option value="odo">Odometer</option>
+            <option value="accum_rbchg_amount">
+              Accumulated RBC Charge Amount
+            </option>
+            <option value="accum_dischg_amount">
+              Accumulated Discharge Amount
+            </option>
+            <option value="accum_chg_amount">Accumulated Charge Amount</option>
+            <option value="dischg_amount">Discharge Amount</option>
+            <option value="chg_amount">Charge Amount</option>
+            <option value="c">Current</option>
+            <option value="v">Voltage</option>
+            <option value="maxt">Max Temperature</option>
+            <option value="mint">Min Temperature</option>
+            <option value="maxtmn">Max Temperature Mnemonic</option>
+            <option value="mintmn">Min Temperature Mnemonic</option>
+            <option value="tdevi">Temperature Deviation</option>
+            <option value="maxcv">Max Cell Voltage</option>
+            <option value="mincv">Min Cell Voltage</option>
+            <option value="maxcvcn">Max Cell Voltage Cell Number</option>
+            <option value="mincvcn">Min Cell Voltage Cell Number</option>
+            <option value="vdevi">Voltage Deviation</option>
+            <option value="soh">State of Health</option>
+            <option value="auxbattvolt">Auxiliary Battery Voltage</option>
+            <option value="residual_value">Residual Value</option>
+            <option value="transactionid">Transaction ID</option>
+            <option value="datacount">Data Count</option>
+          </select>
+          <button onclick="Chart1_Search(event)">Search</button>
+        </section>
+        <div class="chart-wrapper">
+          <canvas id="chart1"width="800" height="450"></canvas>
+        </div>
+      </div>
+      <div class="chart-container">
+        <section class="graph-top">
+          <h2>Chart 2</h2>
+          <label for="category">Category:</label>
+          <select id="Chart2_category" name="Chart2_category">
+            <option value="speed">Speed</option>
+            <option value="rpm">RPM</option>
+            <option value="state">State</option>
+            <option value="displaysoc">Display SOC</option>
+            <option value="bmssoc">BMS SOC</option>
+            <option value="range">Range</option>
+            <option value="trip">Trip</option>
+            <option value="lat">Latitude</option>
+            <option value="lng">Longitude</option>
+            <option value="odo">Odometer</option>
+            <option value="accum_rbchg_amount">
+              Accumulated RBC Charge Amount
+            </option>
+            <option value="accum_dischg_amount">
+              Accumulated Discharge Amount
+            </option>
+            <option value="accum_chg_amount">Accumulated Charge Amount</option>
+            <option value="dischg_amount">Discharge Amount</option>
+            <option value="chg_amount">Charge Amount</option>
+            <option value="c">Current</option>
+            <option value="v">Voltage</option>
+            <option value="maxt">Max Temperature</option>
+            <option value="mint">Min Temperature</option>
+            <option value="maxtmn">Max Temperature Mnemonic</option>
+            <option value="mintmn">Min Temperature Mnemonic</option>
+            <option value="tdevi">Temperature Deviation</option>
+            <option value="maxcv">Max Cell Voltage</option>
+            <option value="mincv">Min Cell Voltage</option>
+            <option value="maxcvcn">Max Cell Voltage Cell Number</option>
+            <option value="mincvcn">Min Cell Voltage Cell Number</option>
+            <option value="vdevi">Voltage Deviation</option>
+            <option value="soh">State of Health</option>
+            <option value="auxbattvolt">Auxiliary Battery Voltage</option>
+            <option value="residual_value">Residual Value</option>
+            <option value="transactionid">Transaction ID</option>
+            <option value="datacount">Data Count</option>
+          </select>
+          <button onclick="Chart2_Search(event)">Search</button>
+        </section>
+        <div class="chart-wrapper">
+          <canvas id="chart2" width="800" height="450"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <section class="graph-top">
+          <h2>Chart 3</h2>
+          <label for="category">Category:</label>
+          <select id="Chart3_category" name="Chart3_category">
+            <option value="speed">Speed</option>
+            <option value="rpm">RPM</option>
+            <option value="state">State</option>
+            <option value="displaysoc">Display SOC</option>
+            <option value="bmssoc">BMS SOC</option>
+            <option value="range">Range</option>
+            <option value="trip">Trip</option>
+            <option value="lat">Latitude</option>
+            <option value="lng">Longitude</option>
+            <option value="odo">Odometer</option>
+            <option value="accum_rbchg_amount">
+              Accumulated RBC Charge Amount
+            </option>
+            <option value="accum_dischg_amount">
+              Accumulated Discharge Amount
+            </option>
+            <option value="accum_chg_amount">Accumulated Charge Amount</option>
+            <option value="dischg_amount">Discharge Amount</option>
+            <option value="chg_amount">Charge Amount</option>
+            <option value="c">Current</option>
+            <option value="v">Voltage</option>
+            <option value="maxt">Max Temperature</option>
+            <option value="mint">Min Temperature</option>
+            <option value="maxtmn">Max Temperature Mnemonic</option>
+            <option value="mintmn">Min Temperature Mnemonic</option>
+            <option value="tdevi">Temperature Deviation</option>
+            <option value="maxcv">Max Cell Voltage</option>
+            <option value="mincv">Min Cell Voltage</option>
+            <option value="maxcvcn">Max Cell Voltage Cell Number</option>
+            <option value="mincvcn">Min Cell Voltage Cell Number</option>
+            <option value="vdevi">Voltage Deviation</option>
+            <option value="soh">State of Health</option>
+            <option value="auxbattvolt">Auxiliary Battery Voltage</option>
+            <option value="residual_value">Residual Value</option>
+            <option value="transactionid">Transaction ID</option>
+            <option value="datacount">Data Count</option>
+          </select>
+          <button onclick="Chart3_Search(event)">Search</button>
+        </section>
+        <div class="chart-wrapper">
+          <canvas id="chart3" width="800" height="450"></canvas>
+        </div>
+      </div>
+      <div class="chart-container">
+        <section class="graph-top">
+          <h2>Chart 4</h2>
+          <label for="category">Category:</label>
+          <select id="Chart4_category" name="Chart4_category">
+            <option value="speed">Speed</option>
+            <option value="rpm">RPM</option>
+            <option value="state">State</option>
+            <option value="displaysoc">Display SOC</option>
+            <option value="bmssoc">BMS SOC</option>
+            <option value="range">Range</option>
+            <option value="trip">Trip</option>
+            <option value="lat">Latitude</option>
+            <option value="lng">Longitude</option>
+            <option value="odo">Odometer</option>
+            <option value="accum_rbchg_amount">
+              Accumulated RBC Charge Amount
+            </option>
+            <option value="accum_dischg_amount">
+              Accumulated Discharge Amount
+            </option>
+            <option value="accum_chg_amount">Accumulated Charge Amount</option>
+            <option value="dischg_amount">Discharge Amount</option>
+            <option value="chg_amount">Charge Amount</option>
+            <option value="c">Current</option>
+            <option value="v">Voltage</option>
+            <option value="maxt">Max Temperature</option>
+            <option value="mint">Min Temperature</option>
+            <option value="maxtmn">Max Temperature Mnemonic</option>
+            <option value="mintmn">Min Temperature Mnemonic</option>
+            <option value="tdevi">Temperature Deviation</option>
+            <option value="maxcv">Max Cell Voltage</option>
+            <option value="mincv">Min Cell Voltage</option>
+            <option value="maxcvcn">Max Cell Voltage Cell Number</option>
+            <option value="mincvcn">Min Cell Voltage Cell Number</option>
+            <option value="vdevi">Voltage Deviation</option>
+            <option value="soh">State of Health</option>
+            <option value="auxbattvolt">Auxiliary Battery Voltage</option>
+            <option value="residual_value">Residual Value</option>
+            <option value="transactionid">Transaction ID</option>
+            <option value="datacount">Data Count</option>
+          </select>
+          <button onclick="Chart4_Search(event)">Search</button>
+        </section>
+        <div class="chart-wrapper">
+          <canvas id="chart4" width="800" height="450"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script src="./src/chart3.js"></script>
+  </body>
+</html>

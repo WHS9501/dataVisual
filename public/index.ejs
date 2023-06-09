@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <style>
+      /* Dark mode styles */
+      body {
+        background-color: #675e5e;
+        color: #ffffff;
+      }
+
+      table,
+      th,
+      td {
+        background-color: #675e5e;
+        color: #ffffff;
+      }
+
+      /* Add more styles for other elements as needed */
+
+      /* Light mode styles (optional) */
+      body.light-mode {
+        background-color: #ffffff;
+        color: #000000;
+      }
+
+      table.light-mode,
+      th.light-mode,
+      td.light-mode {
+        background-color: #f0f0f0;
+        color: #000000;
+      }
+    </style> -->
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <link
+      href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+      rel="stylesheet"
+    />
+    .form-table {
+      display: table;
+      width: 100%;
+    }
+
+    .form-row {
+      display: table-row;
+    }
+
+    .form-cell {
+      display: table-cell;
+      padding: 5px;
+    }
+    <title>차량 데이터 시각화</title>
+  </head>
+  <body>
+
+    <form id="searchForm">
+      <label for="serialNumber">Serial Number:</label>
+      <input type="text" id="serialNumber" name="serialNumber" />
+
+      <label for="startDate">Start Date:</label>
+      <input type="datetime-local" id="startDate" name="startDate" />
+
+      <label for="endDate">End Date:</label>
+      <input type="datetime-local" id="endDate" name="endDate" />
+
+      <label for="state">State:</label>
+      <select id="state" name="state">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+
+      <label for="category">Category:</label>
+      <select id="category" name="category">
+        <option value="speed">Speed</option>
+        <option value="rpm">RPM</option>
+        <option value="state">State</option>
+        <option value="displaysoc">Display SOC</option>
+        <option value="bmssoc">BMS SOC</option>
+        <option value="range">Range</option>
+        <option value="trip">Trip</option>
+        <option value="lat">Latitude</option>
+        <option value="lng">Longitude</option>
+        <option value="odo">Odometer</option>
+        <option value="accum_rbchg_amount">
+          Accumulated RBC Charge Amount
+        </option>
+        <option value="accum_dischg_amount">
+          Accumulated Discharge Amount
+        </option>
+        <option value="accum_chg_amount">Accumulated Charge Amount</option>
+        <option value="dischg_amount">Discharge Amount</option>
+        <option value="chg_amount">Charge Amount</option>
+        <option value="c">Current</option>
+        <option value="v">Voltage</option>
+        <option value="maxt">Max Temperature</option>
+        <option value="mint">Min Temperature</option>
+        <option value="maxtmn">Max Temperature Mnemonic</option>
+        <option value="mintmn">Min Temperature Mnemonic</option>
+        <option value="tdevi">Temperature Deviation</option>
+        <option value="maxcv">Max Cell Voltage</option>
+        <option value="mincv">Min Cell Voltage</option>
+        <option value="maxcvcn">Max Cell Voltage Cell Number</option>
+        <option value="mincvcn">Min Cell Voltage Cell Number</option>
+        <option value="vdevi">Voltage Deviation</option>
+        <option value="soh">State of Health</option>
+        <option value="auxbattvolt">Auxiliary Battery Voltage</option>
+        <option value="residual_value">Residual Value</option>
+        <option value="transactionid">Transaction ID</option>
+        <option value="datacount">Data Count</option>
+      </select>
+
+      <label for="limit">Limit:</label>
+      <input
+        type="number"
+        id="limit"
+        name="limit"
+        min="1"
+        step="100"
+        placeholder="필수입력X"
+      />
+
+      <button onclick="doSearch(event)">Search</button>
+    </form>
+
+    <div id="wrapper"></div>
+
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script src="./src/chart.js"></script>
+
+    <div style="width: 900px; height: 900px">
+      <canvas id="Chart_First"></canvas>
+    </div>
+  </body>
+</html>

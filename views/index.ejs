@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <table>
+      <th>index</th>
+      <th>제목</th>
+      <th>내용</th>
+      <th>관리자이름</th>
+      <th>작성일</th>
+      <th>고정</th>
+      <th>공개</th>
+      <% for(var i = 0; i<5; i++){ %>
+      <tr>
+        <td><%= i %></td>
+        <td><%= data.result[i].title %></td>
+        <td><%= data.result[i].contents %></td>
+        <td><%= data.result[i].adminName %></td>
+        <td><%= data.result[i].createdAt %></td>
+        <td><%= data.result[i].pinned %></td>
+        <td><%= data.result[i].status %></td>
+      </tr>
+      <% } %>
+    </table>
+    <div style="width: 900px; height: 900px">
+      <canvas id="Chart_First"></canvas>
+    </div>
+  </body>
+</html>
+
+<!--============================================== script================================================== -->
+<script>
+  const SERIAL_NUMBER = "9000076";
+  const CATEGORY = "bmssoc";
+  const STAR_TDATE = "2023-05-26T00:00:00.000Z";
+  const END_DATE = "2023-05-26T23:59:59.000Z";
+  const LMIT = 100;
+  const CAR_STATE = 1;
+
+  fetch("http://localhost:3000/api/data/aggbattdata1ms", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      category: CATEGORY,
+      serialnumber: SERIAL_NUMBER,
+      startDate: STAR_TDATE,
+      endDate: END_DATE,
+      state: CAR_STATE,
+      limit: LMIT,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      let dataCheck = data.success;
+      let dataResult = data.result;
+
+      if (dataCheck === true) {
+        //가로 축, 세로축
+        X_dir = dataResult.createdAt;
+        Y_dir = dataResult[CATEGORY];
+        ChartName = CATEGORY;
+
+        createChart();
+      }
+    })
+    .catch((error) => {
+      console.log("Error fetching data:", error);
+    });
+
+  function createChart() {
+    var chartArea = document.getElementById("Chart_First").getContext("2d");
+
+    // create the chart
+    var Chart_First = new Chart(chartArea, {
+      type: "line",
+      data: {
+        labels: X_dir,
+        datasets: [
+          {
+            label: ChartName,
+            data: Y_dir,
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  }
+</script>
