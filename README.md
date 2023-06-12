@@ -12,7 +12,7 @@
 
 * * *
 ## 💡실행방법
->npm run dev로 실행
+> npm install (package 다운)<br> npm run dev (실행)
 <br>
 
 * * *
