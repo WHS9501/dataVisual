@@ -28,7 +28,7 @@ app.set('views', __dirname + '/public');
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.render('index3', );
+  res.render('index3',);
 })
 
 
@@ -40,6 +40,10 @@ app.get('/test', function (req, res) {
 app.get('/mongo', async (req, res) => {
   res.status(201).json({ result: result });
 })
+
+// const { req } = require('./tem')
+
+// req();
 
 // Start the app
 app.listen(port, () => {
